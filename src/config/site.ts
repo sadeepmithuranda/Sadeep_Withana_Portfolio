@@ -15,7 +15,7 @@ export const site = {
   links: {
     email: 'sadeepmithuranda@gmail.com', // e.g. 'you@example.com'
     github: 'https://github.com/sadeepmithuranda',
-    linkedin: '', // e.g. 'https://www.linkedin.com/in/your-handle'
+    linkedin: 'www.linkedin.com/in/sadeep-withana-006b8034a', // e.g. 'https://www.linkedin.com/in/your-handle'
     researchProfile: '', // e.g. ORCID / Google Scholar / ResearchGate URL
   },
 
