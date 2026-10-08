@@ -33,8 +33,13 @@ export const site = {
   /** Optional: repository names to feature first, in order. */
   featuredRepos: [] as string[],
 
-  /** Contact form endpoint (Formspree, Getform, a serverless function…). Empty = form shown as not yet active. */
-  contactFormEndpoint: '',
+  /**
+   * Contact form endpoint. Uses FormSubmit (formsubmit.co), which forwards messages to your inbox.
+   * The first message ever sent triggers a one-time "Activate form" email from FormSubmit — click it once.
+   * After activating you can replace the email in this URL with the random alias FormSubmit gives you.
+   * Empty = form shown as not yet active.
+   */
+  contactFormEndpoint: 'https://formsubmit.co/ajax/sadeepmithuranda@gmail.com',
 
   cv: {
     /** Drop your PDF at public/cv/ with this name (or change the path). */

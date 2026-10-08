@@ -444,14 +444,25 @@ export function Contact() {
     e.preventDefault();
     if (!endpoint) return;
     const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    if (data._honey) return; // spam bot filled the hidden field
     setState('sending');
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: new FormData(form),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          topic: data.topic,
+          message: data.message,
+          _replyto: data.email,
+          _subject: `Portfolio message: ${data.topic} — ${data.name}`,
+          _template: 'table',
+        }),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (!res.ok || String(json.success) === 'false') throw new Error('send failed');
       setState('sent');
       form.reset();
     } catch {
@@ -493,6 +504,7 @@ export function Contact() {
 
         <form onSubmit={submit} className="panel reveal flex min-w-0 flex-col gap-4 self-start p-6 sm:p-8" aria-describedby="form-note">
           <p className="font-mono text-xs uppercase tracking-wider text-muted">Send a message</p>
+          <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="cf-name" className="text-sm text-fg">Name</label>
@@ -520,7 +532,7 @@ export function Contact() {
           </button>
           <p id="form-note" className="text-sm text-dim" role="status">
             {!endpoint && 'The contact form is being set up. Use the channels on the left once they are live.'}
-            {state === 'sent' && 'Message sent. Thanks — I’ll reply by email.'}
+            {state === 'sent' && 'Message sent. Thanks, I’ll reply by email.'}
             {state === 'error' && 'The message didn’t go through. Check your connection and try again.'}
           </p>
         </form>
