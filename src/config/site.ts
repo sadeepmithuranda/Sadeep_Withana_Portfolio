@@ -6,7 +6,7 @@
 export const site = {
   name: 'Sadeep Withana',
   /** Full deployed URL, no trailing slash. Used for canonical links, share links and the sitemap. */
-  url: '',
+  url: 'https://sadeepmithuranda.github.io/Sadeep_Withana_Portfolio',
   title: 'Sadeep Withana | Computer Engineering | TinyML | IoT | Embedded Systems',
   description:
     'Sadeep Withana is a Computer Engineering undergraduate exploring TinyML, IoT, embedded systems, edge AI, robotics, and intelligent hardware-software systems.',
