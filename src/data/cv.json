@@ -1,0 +1,125 @@
+{
+  "_note": "Single source for the CV page (/cv) and the generated PDF (npm run cv:pdf). Only add facts that are true. Contact details come from src/config/site.ts.",
+  "name": "Sadeep Withana",
+  "title": "Computer Engineering Undergraduate",
+  "focus": "Embedded Systems · IoT · TinyML · Edge AI · Robotics",
+  "location": "Sri Lanka",
+  "summary": "Computer Engineering undergraduate at General Sir John Kotelawala Defence University (KDU) who builds hardware-software systems: sensors, microcontrollers, embedded machine learning and connected devices. Currently researching how INT8 quantization affects a compact ECG model for atrial fibrillation detection on the ESP32-S3. Interested in embedded systems, IoT, TinyML, edge AI, robotics, and cloud/DevOps engineering roles and research opportunities.",
+  "education": [
+    {
+      "degree": "BSc (Hons) in Computer Engineering",
+      "institution": "General Sir John Kotelawala Defence University (KDU)",
+      "detail": "Faculty of Computing · Intake 41",
+      "period": "In progress",
+      "coursework": [
+        "Embedded Systems",
+        "Internet of Things",
+        "Digital Signal Processing",
+        "Computer Network Security",
+        "Big Data Analytics",
+        "Computer Systems Engineering",
+        "Engineering Design Project"
+      ]
+    }
+  ],
+  "research": [
+    {
+      "title": "Impact of INT8 Quantization on Compact ECG-Based AF Detection on ESP32-S3",
+      "status": "Ongoing",
+      "points": [
+        "Research question: how INT8 quantization affects AF detection performance, memory usage and inference time of a compact 1D CNN on a microcontroller.",
+        "Pipeline: single-lead ECG dataset, preprocessing, Float32 baseline, post-training INT8 quantization, deployment with TensorFlow Lite Micro on ESP32-S3.",
+        "Evaluation: detection performance, memory, inference time, model size and compute requirements."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "IoT Fall Detection System",
+      "tech": "ESP32 · MPU6050 · Random Forest / SVM · KiCad · OpenSCAD",
+      "status": "In development",
+      "points": [
+        "Fall detection node for elderly care using IMU data and embedded ML classifiers, with post-fall inactivity analysis to reduce false alarms.",
+        "Designed the PCB in KiCad and a parametric 3D-printed enclosure in OpenSCAD."
+      ]
+    },
+    {
+      "title": "WellNest — Privacy-First Ambient Assisted Living Multi-Agent System",
+      "tech": "FastAPI · Google ADK · Gemini · A2A · MCP · FHIR R4 · ESP32-S3",
+      "status": "Team prototype",
+      "points": [
+        "Camera-free elderly care monitoring with four cooperating agents on an asynchronous pub/sub event bus.",
+        "Team entry for AI Challenge Sri Lanka 2026 (Phase II). My role: backend design and UI/UX."
+      ]
+    },
+    {
+      "title": "Garden Watering Robot",
+      "tech": "ESP32-S3 · IR line sensors · Motor driver · Soil moisture sensors",
+      "status": "In progress",
+      "points": [
+        "Line-following robot that visits two garden zones, reads soil moisture and waters only the zones that need it."
+      ]
+    },
+    {
+      "title": "Face Mask Detection",
+      "tech": "Python · OpenCV · MobileNetV2 · Flask",
+      "status": "Built",
+      "points": [
+        "Camera → face detection → preprocessing → MobileNetV2 classifier → mask / no-mask label, delivered through a Flask web app."
+      ]
+    },
+    {
+      "title": "IoT & Sensor Builds",
+      "tech": "ESP32 · ESP8266 · Arduino · MQTT · ThingsBoard · ThingSpeak",
+      "status": "Ongoing",
+      "points": [
+        "Sensor and actuator builds (DHT, MQ, ultrasonic, servo, relays, water pumps) publishing to cloud dashboards over MQTT."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "group": "Comfortable with",
+      "items": [
+        "Python",
+        "C/C++",
+        "Arduino",
+        "ESP32",
+        "Git/GitHub",
+        "Basic IoT development"
+      ]
+    },
+    {
+      "group": "Currently exploring",
+      "items": [
+        "TinyML",
+        "Edge AI",
+        "TensorFlow Lite Micro",
+        "ESP32-S3",
+        "Model quantization",
+        "Robotics",
+        "DevOps"
+      ]
+    },
+    {
+      "group": "Hardware & tools",
+      "items": [
+        "KiCad",
+        "EasyEDA",
+        "OpenSCAD",
+        "3D printing",
+        "Linux",
+        "MQTT",
+        "ThingsBoard",
+        "ThingSpeak"
+      ]
+    }
+  ],
+  "interests": [
+    "Embedded AI",
+    "Biomedical IoT",
+    "ECG analysis",
+    "Edge computing",
+    "Resource-constrained ML"
+  ]
+}

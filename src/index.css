@@ -1,0 +1,342 @@
+@import 'tailwindcss';
+
+/*
+  Layout concept: an engineering bench — dark board, hairline traces, instrument panels,
+  with one live signal (purple) running through everything. Dark only.
+*/
+:root,
+html:root {
+  color-scheme: dark;
+  --bg: #08070d;
+  --bg-2: #0d0b16;
+  --panel: #110e1c;
+  --line: #211c33;
+  --line-2: #342c4d;
+  --fg: #ece8f6;
+  --muted: #9d94b8;
+  --dim: #6a6187;
+  --accent: #a98bff;
+  --blue: #7c8cff;
+  --signal: #5fe0a8;
+  --violet: #e07cf0;
+  --on-accent: #120a24;
+  --paper: #ffffff;
+  --paper-ink: #111a24;
+  --paper-muted: #4a5868;
+  --paper-line: #dce3ea;
+  --paper-accent: #6a3fd0;
+  --grid: rgba(169, 139, 255, 0.05);
+}
+
+/* Page ground: unlayered and !important so no external reset (e.g. an embedding frame) can turn it light */
+html,
+html body {
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg-2);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-line2: var(--line-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-accent: var(--accent);
+  --color-blue: var(--blue);
+  --color-signal: var(--signal);
+  --color-violet: var(--violet);
+  --color-onaccent: var(--on-accent);
+  --color-paper: var(--paper);
+  --color-ink: var(--paper-ink);
+  --color-inkmuted: var(--paper-muted);
+  --color-inkline: var(--paper-line);
+  --color-inkaccent: var(--paper-accent);
+
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  [id] {
+    scroll-margin-top: 84px;
+  }
+}
+
+@layer components {
+  /* Wide-set display type, like silkscreen on a board */
+  .display-wide {
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .board-grid {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  /* Corner registration marks used on the few framed instruments */
+  .reg-marks {
+    position: relative;
+  }
+  .reg-marks::before,
+  .reg-marks::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--accent);
+    border-style: solid;
+    pointer-events: none;
+  }
+  .reg-marks::before {
+    top: -1px;
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .reg-marks::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.25s ease;
+  }
+  .link-underline:hover {
+    background-size: 100% 1px;
+  }
+}
+
+/* Scroll reveal without JS: content is fully visible where unsupported */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0.55;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+.flow-line {
+  stroke-dasharray: 4 6;
+  animation: dash-flow 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .caret,
+  .live-dot,
+  .flow-line {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Article typography (blog) ---------- */
+.prose-lab {
+  max-width: 68ch;
+  color: var(--fg);
+}
+.prose-lab h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 2.4rem 0 0.8rem;
+}
+.prose-lab h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 1.8rem 0 0.6rem;
+}
+.prose-lab p,
+.prose-lab ul,
+.prose-lab ol {
+  margin: 0 0 1.1rem;
+  color: var(--muted);
+}
+.prose-lab ul {
+  list-style: square;
+  padding-left: 1.2rem;
+}
+.prose-lab ol {
+  list-style: decimal;
+  padding-left: 1.4rem;
+}
+.prose-lab li {
+  margin: 0.3rem 0;
+}
+.prose-lab li::marker {
+  color: var(--accent);
+}
+.prose-lab a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-lab strong {
+  color: var(--fg);
+}
+.prose-lab code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  color: var(--fg);
+}
+.prose-lab pre {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  margin: 0 0 1.3rem;
+}
+.prose-lab pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.prose-lab blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  margin: 0 0 1.2rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.prose-lab img,
+.prose-lab iframe,
+.prose-lab video {
+  max-width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  margin: 0 0 1.2rem;
+}
+.prose-lab table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 1.2rem;
+  font-size: 0.92rem;
+}
+.prose-lab th,
+.prose-lab td {
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+}
+
+/* ---------- CV print ---------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  body {
+    background: #fff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .cv-sheet {
+    box-shadow: none !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
