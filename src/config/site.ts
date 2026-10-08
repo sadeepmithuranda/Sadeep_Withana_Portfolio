@@ -13,7 +13,7 @@ export const site = {
   tagline: 'Building intelligent systems at the edge — one sensor, microcontroller and model at a time.',
 
   links: {
-    email: '', // e.g. 'you@example.com'
+    email: 'sadeepmithuranda@gmail.com', // e.g. 'you@example.com'
     github: 'https://github.com/sadeepmithuranda',
     linkedin: '', // e.g. 'https://www.linkedin.com/in/your-handle'
     researchProfile: '', // e.g. ORCID / Google Scholar / ResearchGate URL
