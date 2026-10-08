@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { FileText, Menu, X } from 'lucide-react';
 import { site } from '../../config/site';
 import { Container, GithubIcon, LinkedinIcon, SectionLink } from '../ui/ui';
+import BackgroundFX from './BackgroundFX';
 
 type NavItem = { label: string; section?: string; to?: string };
 const nav: NavItem[] = [
@@ -40,11 +41,16 @@ function Logo() {
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const location = useLocation();
 
   useEffect(() => setOpen(false), [location.pathname]);
   useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 8);
+    const on = () => {
+      setScrolled(window.scrollY > 8);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    };
     on();
     window.addEventListener('scroll', on, { passive: true });
     return () => window.removeEventListener('scroll', on);
@@ -111,6 +117,12 @@ function Navbar() {
           </button>
         </div>
       </Container>
+
+      <span
+        aria-hidden="true"
+        className="scroll-progress absolute bottom-[-1px] left-0 h-px w-full origin-left"
+        style={{ transform: `scaleX(${progress})` }}
+      />
 
       {open && (
         <nav id="mobile-nav" aria-label="Mobile" className="border-t border-line bg-bg lg:hidden">
@@ -183,7 +195,8 @@ export default function Layout() {
   }, [location.pathname, location.state]);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
+      <BackgroundFX />
       <a
         href="#main"
         onClick={(e) => {
@@ -194,11 +207,13 @@ export default function Layout() {
       >
         Skip to content
       </a>
-      <Navbar />
-      <main id="main" tabIndex={-1} className="flex-1 outline-none">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="relative z-[1] flex flex-1 flex-col">
+        <Navbar />
+        <main id="main" tabIndex={-1} className="flex-1 outline-none">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

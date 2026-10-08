@@ -157,6 +157,54 @@ html body {
   }
 }
 
+/* ---------- Ambient background ---------- */
+.bgfx-glow {
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  opacity: 0.18;
+  will-change: transform;
+  contain: strict;
+}
+.bgfx-glow-a {
+  background: radial-gradient(circle closest-side, var(--accent) 0%, color-mix(in oklab, var(--accent) 35%, transparent) 35%, transparent 100%);
+  top: -20vmax;
+  left: -15vmax;
+  animation: glow-drift-a 38s ease-in-out infinite alternate;
+}
+.bgfx-glow-b {
+  background: radial-gradient(circle closest-side, var(--blue) 0%, color-mix(in oklab, var(--blue) 35%, transparent) 35%, transparent 100%);
+  bottom: -25vmax;
+  right: -20vmax;
+  opacity: 0.12;
+  animation: glow-drift-b 46s ease-in-out infinite alternate;
+}
+@keyframes glow-drift-a {
+  to {
+    transform: translate(28vw, 22vh) scale(1.15);
+  }
+}
+@keyframes glow-drift-b {
+  to {
+    transform: translate(-24vw, -18vh) scale(0.9);
+  }
+}
+.bgfx-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, color-mix(in oklab, var(--bg) 75%, transparent) 100%);
+}
+.scroll-progress {
+  background: linear-gradient(90deg, var(--accent), var(--violet));
+  box-shadow: 0 0 8px var(--accent);
+  transition: transform 0.1s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bgfx-glow {
+    animation: none;
+  }
+}
+
 /* Scroll reveal without JS: content is fully visible where unsupported */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
