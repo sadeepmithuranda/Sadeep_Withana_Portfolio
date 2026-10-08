@@ -36,7 +36,7 @@ function buildTraces(w: number, h: number): Trace[] {
   const r = rand(Math.round(w) * 31 + Math.round(h));
   const cols = Math.ceil(w / CELL) + 1;
   const rows = Math.ceil(h / CELL) + 1;
-  const count = Math.round(Math.min(46, Math.max(14, (w * h) / 42000)));
+  const count = Math.round(Math.min(26, Math.max(9, (w * h) / 75000)));
   const dirs: Pt[] = [
     [1, 0],
     [0, 1],
@@ -71,7 +71,7 @@ function buildTraces(w: number, h: number): Trace[] {
       segs.push(l);
       len += l;
     }
-    traces.push({ pts, len, segs, speed: 40 + r() * 60, phase: r(), hasPulse: r() < 0.55 });
+    traces.push({ pts, len, segs, speed: 16 + r() * 18, phase: r(), hasPulse: r() < 0.3 });
   }
   return traces;
 }
@@ -146,14 +146,14 @@ export default function BackgroundFX() {
       const accent = hexToRgb(tokens.accent);
       const violet = hexToRgb(tokens.violet);
       // slow parallax: the board drifts up at a fraction of scroll speed, wrapping around
-      const off = reduced ? 0 : -((window.scrollY * 0.12) % h);
+      const off = reduced ? 0 : -((window.scrollY * 0.08) % h);
 
       ctx.clearRect(0, 0, w, h);
 
       // cursor spotlight on the dot grid
       if (!coarse && pointer.x > -999) {
         const g = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 220);
-        g.addColorStop(0, `rgba(${accent},0.10)`);
+        g.addColorStop(0, `rgba(${accent},0.045)`);
         g.addColorStop(1, `rgba(${accent},0)`);
         ctx.fillStyle = g;
         ctx.fillRect(pointer.x - 220, pointer.y - 220, 440, 440);
@@ -166,7 +166,7 @@ export default function BackgroundFX() {
             const py = gy + off;
             const d = Math.hypot(gx - pointer.x, py - pointer.y);
             if (d > 180) continue;
-            ctx.globalAlpha = (1 - d / 180) * 0.7;
+            ctx.globalAlpha = (1 - d / 180) * 0.3;
             ctx.fillRect(gx - 0.8, py - 0.8, 1.6, 1.6);
           }
         ctx.globalAlpha = 1;
@@ -181,8 +181,8 @@ export default function BackgroundFX() {
 
         for (const tr of traces) {
           const near = !coarse && pointer.x > -999 ? nearestDist(tr, local) : Infinity;
-          const glow = Math.max(0, 1 - near / 160);
-          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.12 + glow * 0.45})` : tokens.line;
+          const glow = Math.max(0, 1 - near / 120);
+          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.1 + glow * 0.22})` : tokens.line;
           ctx.lineWidth = 1.2;
           ctx.beginPath();
           tr.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
@@ -192,7 +192,7 @@ export default function BackgroundFX() {
           const [sx, sy] = tr.pts[0];
           const [ex, ey] = tr.pts[tr.pts.length - 1];
           ctx.fillStyle = tokens.bg;
-          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.25 + glow * 0.5})` : tokens.line2;
+          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.2 + glow * 0.25})` : tokens.line2;
           for (const [px, py] of [
             [sx, sy],
             [ex, ey],
@@ -207,21 +207,15 @@ export default function BackgroundFX() {
             const head = ((t * tr.speed) / tr.len + tr.phase) % 1;
             const d0 = head * tr.len;
             // short fading tail behind the pulse
-            for (let k = 0; k < 6; k++) {
-              const dd = d0 - k * 6;
+            for (let k = 0; k < 4; k++) {
+              const dd = d0 - k * 5;
               if (dd < 0) break;
               const [x, y] = pointAt(tr, dd);
-              ctx.fillStyle = `rgba(${k === 0 ? accent : violet},${(0.75 - k * 0.12).toFixed(2)})`;
+              ctx.fillStyle = `rgba(${k === 0 ? accent : violet},${(0.45 - k * 0.1).toFixed(2)})`;
               ctx.beginPath();
-              ctx.arc(x, y, k === 0 ? 2 : 1.4, 0, Math.PI * 2);
+              ctx.arc(x, y, k === 0 ? 1.6 : 1.1, 0, Math.PI * 2);
               ctx.fill();
             }
-            const [hx, hy] = pointAt(tr, d0);
-            const halo = ctx.createRadialGradient(hx, hy, 0, hx, hy, 12);
-            halo.addColorStop(0, `rgba(${accent},0.35)`);
-            halo.addColorStop(1, `rgba(${accent},0)`);
-            ctx.fillStyle = halo;
-            ctx.fillRect(hx - 12, hy - 12, 24, 24);
           }
         }
         ctx.restore();
@@ -269,7 +263,7 @@ export default function BackgroundFX() {
     <div aria-hidden="true" className="bgfx no-print pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="bgfx-glow bgfx-glow-a" />
       <div className="bgfx-glow bgfx-glow-b" />
-      <canvas ref={ref} className="absolute inset-0" />
+      <canvas ref={ref} className="absolute inset-0 opacity-70" />
       <div className="bgfx-vignette" />
     </div>
   );
