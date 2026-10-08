@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Check, Copy, Download, FileText, GitBranch, Mail, Microscope, Star } from 'lucide-react';
 import Terminal from './Terminal';
+import ProfileBadge from './ProfileBadge';
 import Constellation from '../visuals/Constellation';
 import { Pipeline } from '../visuals/Pipeline';
 import { focusAreas, profile, research, skillTiers, timeline } from '../../data/profile';
@@ -51,9 +52,10 @@ export function About() {
             ))}
           </dl>
         </div>
-        <div className="reveal min-w-0 lg:pt-16">
+        <div className="reveal flex min-w-0 flex-col gap-5 lg:pt-16">
+          <ProfileBadge />
           <Terminal />
-          <p className="mt-3 font-mono text-xs text-dim">Try it: type a command and press Enter.</p>
+          <p className="-mt-2 font-mono text-xs text-dim">Try it: type a command and press Enter.</p>
         </div>
       </Container>
     </section>

@@ -19,6 +19,15 @@ export const site = {
     researchProfile: '', // e.g. ORCID / Google Scholar / ResearchGate URL
   },
 
+  /**
+   * Profile photo. Upload a square-ish image to public/images/ with this exact name
+   * (jpg, ~600×600px). Until it exists the site shows an "SW" monogram placeholder.
+   */
+  photo: {
+    path: 'images/profile.jpg',
+    alt: 'Portrait of Sadeep Withana',
+  },
+
   /** GitHub username for the live repository section. Empty = placeholder state. */
   githubUsername: 'sadeepmithuranda',
   /** Optional: repository names to feature first, in order. */
