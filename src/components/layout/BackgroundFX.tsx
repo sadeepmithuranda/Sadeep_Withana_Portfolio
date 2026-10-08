@@ -152,22 +152,23 @@ export default function BackgroundFX() {
 
       // cursor spotlight on the dot grid
       if (!coarse && pointer.x > -999) {
-        const g = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 220);
-        g.addColorStop(0, `rgba(${accent},0.045)`);
+        const g = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 260);
+        g.addColorStop(0, `rgba(${accent},0.22)`);
+        g.addColorStop(0.45, `rgba(${accent},0.08)`);
         g.addColorStop(1, `rgba(${accent},0)`);
         ctx.fillStyle = g;
-        ctx.fillRect(pointer.x - 220, pointer.y - 220, 440, 440);
+        ctx.fillRect(pointer.x - 260, pointer.y - 260, 520, 520);
 
         ctx.fillStyle = `rgba(${accent},0.55)`;
-        const gx0 = Math.floor((pointer.x - 180) / 24) * 24;
-        const gy0 = Math.floor((pointer.y - 180 - off) / 24) * 24;
-        for (let gx = gx0; gx < pointer.x + 180; gx += 24)
-          for (let gy = gy0; gy < pointer.y + 180 - off; gy += 24) {
+        const gx0 = Math.floor((pointer.x - 200) / 24) * 24;
+        const gy0 = Math.floor((pointer.y - 200 - off) / 24) * 24;
+        for (let gx = gx0; gx < pointer.x + 200; gx += 24)
+          for (let gy = gy0; gy < pointer.y + 200 - off; gy += 24) {
             const py = gy + off;
             const d = Math.hypot(gx - pointer.x, py - pointer.y);
-            if (d > 180) continue;
-            ctx.globalAlpha = (1 - d / 180) * 0.3;
-            ctx.fillRect(gx - 0.8, py - 0.8, 1.6, 1.6);
+            if (d > 200) continue;
+            ctx.globalAlpha = (1 - d / 200) * 0.9;
+            ctx.fillRect(gx - 1.1, py - 1.1, 2.2, 2.2);
           }
         ctx.globalAlpha = 1;
       }
@@ -181,9 +182,11 @@ export default function BackgroundFX() {
 
         for (const tr of traces) {
           const near = !coarse && pointer.x > -999 ? nearestDist(tr, local) : Infinity;
-          const glow = Math.max(0, 1 - near / 120);
-          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.1 + glow * 0.22})` : tokens.line;
-          ctx.lineWidth = 1.2;
+          const glow = Math.max(0, 1 - near / 170);
+          const lit = glow > 0.02;
+          ctx.globalAlpha = lit ? 1 : 0.7;
+          ctx.strokeStyle = lit ? `rgba(${accent},${0.25 + glow * 0.7})` : tokens.line;
+          ctx.lineWidth = lit ? 1.2 + glow * 0.9 : 1.2;
           ctx.beginPath();
           tr.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
           ctx.stroke();
@@ -192,7 +195,7 @@ export default function BackgroundFX() {
           const [sx, sy] = tr.pts[0];
           const [ex, ey] = tr.pts[tr.pts.length - 1];
           ctx.fillStyle = tokens.bg;
-          ctx.strokeStyle = glow > 0.02 ? `rgba(${accent},${0.2 + glow * 0.25})` : tokens.line2;
+          ctx.strokeStyle = lit ? `rgba(${accent},${0.35 + glow * 0.6})` : tokens.line2;
           for (const [px, py] of [
             [sx, sy],
             [ex, ey],
@@ -202,6 +205,7 @@ export default function BackgroundFX() {
             ctx.fill();
             ctx.stroke();
           }
+          ctx.globalAlpha = 1;
 
           if (tr.hasPulse && !reduced) {
             const head = ((t * tr.speed) / tr.len + tr.phase) % 1;
@@ -211,7 +215,7 @@ export default function BackgroundFX() {
               const dd = d0 - k * 5;
               if (dd < 0) break;
               const [x, y] = pointAt(tr, dd);
-              ctx.fillStyle = `rgba(${k === 0 ? accent : violet},${(0.45 - k * 0.1).toFixed(2)})`;
+              ctx.fillStyle = `rgba(${k === 0 ? accent : violet},${(0.32 - k * 0.07).toFixed(2)})`;
               ctx.beginPath();
               ctx.arc(x, y, k === 0 ? 1.6 : 1.1, 0, Math.PI * 2);
               ctx.fill();
@@ -263,7 +267,7 @@ export default function BackgroundFX() {
     <div aria-hidden="true" className="bgfx no-print pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="bgfx-glow bgfx-glow-a" />
       <div className="bgfx-glow bgfx-glow-b" />
-      <canvas ref={ref} className="absolute inset-0 opacity-70" />
+      <canvas ref={ref} className="absolute inset-0" />
       <div className="bgfx-vignette" />
     </div>
   );
